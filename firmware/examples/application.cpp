@@ -7,18 +7,44 @@
 unsigned int nextTime = 0;    // Next time to contact the server
 Structureioforspark structure;
 
+// Structure credentials.
+const char* STRUCTURE_DEVICE_ID = "my-device-id";
+const char* STRUCTURE_ACCESS_KEY = "my-app-key";
+const char* STRUCTURE_ACCESS_SECRET = "my-app-secret";
+
+StructureDevice device(STRUCTURE_DEVICE_ID);
+
+void connect() {
+  device.connectSecure(wifiClient, STRUCTURE_ACCESS_KEY, STRUCTURE_ACCESS_SECRET);
+
+  while(!device.connected()) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("Connected!");
+}
 
 void setup() {
     Serial.begin(9600);
+
+    while(!Serial) { }
+
+    connect();
+
 }
 
 void loop() {
-    if (nextTime > millis()) {
-        return;
-    }
+  bool toReconnect = false;
 
-    Serial.println();
-    Serial.println("Application>\tStart of Loop.");
+  if(!device.connected()) {
+    Serial.println("Disconnected from Structure");
+    toReconnect = true;
+  }
 
-    nextTime = millis() + 10000;
+  if(toReconnect) {
+    connect();
+  }
+
+  device.loop();
 }

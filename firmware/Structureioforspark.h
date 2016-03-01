@@ -8,7 +8,7 @@
 #define STRUCTURE_TOPIC_STATE "/state"
 #define STRUCTURE_TOPIC_COMMAND "/command"
 
-#include "internal/StructureDevice.h"
-#include "internal/StructureCommand.h"
+#include "StructureDevice.h"
+#include "StructureCommand.h"
 
 #endif /* STRUCTURE_H_ */
